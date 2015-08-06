@@ -12,6 +12,10 @@ The site is built with node and express. It lets you upload a video and converts
 FFmpeg is used for conversion and also to create a manifest file. 
 The site then streams streams the correct video file depending on the clients bandwidth.
 
+##Setup
+git clone
+npm install
+node app.js
 
 ## Notes
 **Browsers**
@@ -19,10 +23,8 @@ The site then streams streams the correct video file depending on the clients ba
 * Does not work on Firefox (no Media Source Extensions support yet)
 * Didn't manage to test on Safari or IE.
 
-
-
-
-
+I only managed to test out [Shaka Player](https://github.com/google/shaka-player). I tried using [dash.js](https://github.com/Dash-Industry-Forum/dash.js/) but could not get it to work.
+I used FFmpeg to create my manifest files but after reading up a bit more, seems like [DashEncoder](https://github.com/slederer/DASHEncoder) might be better.
 
 
 
