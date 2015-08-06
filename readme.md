@@ -10,7 +10,7 @@ The site is built with node and express. It lets you upload a video and converts
 * audio_only.webm
 
 FFmpeg is used for conversion and also to create a manifest file. 
-The site then streams streams the correct video file depending on the clients bandwidth.
+The site then streams the correct video file depending on the clients bandwidth.
 
 ##Setup
 git clone
