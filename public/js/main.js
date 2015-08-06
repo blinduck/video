@@ -24,6 +24,7 @@ $(document).ready(function () {
         // Construct a DashVideoSource to represent the DASH manifest.
         //var mpdUrl = 'http://turtle-tube.appspot.com/t/t2/dash.mpd';
         var mpdUrl = 'video/manifest.mpd';
+        console.log(mpdUrl);
         var estimator = new shaka.util.EWMABandwidthEstimator();
         var source = new shaka.player.DashVideoSource(mpdUrl, null, estimator);
 
