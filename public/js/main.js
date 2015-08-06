@@ -6,15 +6,14 @@ $(document).ready(function () {
         // Install polyfills.
         shaka.polyfill.installAll();
 
-        // Find the video element.
+        // Find the video element, construct player
         var video = document.getElementById('video');
-        window.video = video;
-        // Construct a Player to wrap around it.
         var player = new shaka.player.Player(video);
 
-        // Attach the player to the window so that it can be easily debugged.
+        // Attach the player, source and video to window
         window.player = player;
         window.source = source;
+        window.video = video;
 
         // Listen for errors from the Player.
         player.addEventListener('error', function (event) {
@@ -22,7 +21,6 @@ $(document).ready(function () {
         });
 
         // Construct a DashVideoSource to represent the DASH manifest.
-        //var mpdUrl = 'http://turtle-tube.appspot.com/t/t2/dash.mpd';
         var mpdUrl = 'video/manifest.mpd';
         console.log(mpdUrl);
         var estimator = new shaka.util.EWMABandwidthEstimator();
@@ -31,56 +29,55 @@ $(document).ready(function () {
         // Load the source into the Player.
         player.load(source);
 
-        player.addEventListener('adaptation', function (evt) {
-            console.log('adaptation', evt);
-        });
-
-
-        log_data();
+        show_data_on_screen();
     }
-
     initPlayer();
 
-    var vid1 = $('#vid1');
-    var vid2 = $('#vid2');
-    var vid3 = $('#vid3');
+    //get dom elements which are used to show data about video streams
+    var vid1_data = document.getElementById("vid1");
+    var vid2_data = document.getElementById("vid2");
+    var vid3_data = document.getElementById("vid3");
 
-    function log_data() {
+    // Show data about the video streams and which one is active to the client
+    function show_data_on_screen() {
         window.setTimeout(function () {
             track1 = window.player.getVideoTracks()[0];
-            vid1.html(track1.width + "x" + track1.height + ", Active:" + track1.active);
+            vid1_data.innerHTML = track1.width + "x" + track1.height + ", Active:" + track1.active;
             track2 = window.player.getVideoTracks()[1];
-            vid2.html(track2.width + "x" + track2.height + ", Active:" + track2.active);
+            vid2_data.innerHTML = track2.width + "x" + track2.height + ", Active:" + track2.active;
             track3 = window.player.getVideoTracks()[2];
-            vid3.html(track3.width + "x" + track3.height + ", Active:" + track3.active);
-            //console.log(window.source.videoWidth, window.source.videoHeight);
-            //console.log('video tracks', player.getVideoTracks());
-            log_data();
+            vid3_data.innerHTML = track3.width + "x" + track3.height + ", Active:" + track3.active;
+            show_data_on_screen();
         }, 1000)
     }
 
 
-
     //Handle uploading of files
     var uploader = new SocketIOFileUpload(socket);
+
     uploader.listenOnSubmit(
         document.getElementById('submit_button'),
         document.getElementById('file_input')
     );
+
     uploader.addEventListener('start', function (event) {
         event.file.meta.client_id = socket.id;
         console.log('file upload started');
     });
 
-    var upload_progress = $("#upload_progress");
+    //Show upload progress to client
+    var upload_progress = document.getElementById("upload_progress");
     uploader.addEventListener('progress', function (evt) {
-        upload_progress.html("Upload Progress: " + Math.floor(evt.bytesLoaded / evt.file.size)*100 + "%");
+        upload_progress.innerHTML = "Upload Progress: " + Math.floor(evt.bytesLoaded / evt.file.size)*100 + "%";
         console.log('progress', evt.bytesLoaded / evt.file.size);
     });
     uploader.addEventListener('complete', function (evt) {
-        upload_progress.html("Upload Complete");
+        upload_progress.innerHTML = "Upload: Complete";
     });
 
+
+
+    // dom elements used to show data about conversion progress
     conversion_indicators = {
         "320x180" :  document.getElementById('small_conv_progress'),
         "640x360" :  document.getElementById('med_conv_progress'),
@@ -89,11 +86,11 @@ $(document).ready(function () {
         "dash": document.getElementById("dash_manifest")
     };
 
-    //listen for the video conversion events
-    socket.on("upload_complete", function (msg) {
-        console.log('upload complete', msg);
 
-    });
+    /*
+    *  Listen for the video conversion events
+    *  and show conversion progress to the client
+    * */
     socket.on("conversion_complete", function (msg) {
         console.log('conversion complete', msg);
         conversion_indicators[msg.type].innerHTML = "Complete"
