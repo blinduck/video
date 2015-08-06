@@ -10,15 +10,15 @@ The site lets you upload a video and converts it to:
 * audio_only.webm
 
 FFmpeg is used for conversion and also to create a manifest file. 
-The site then streams based the (theoretically) streams the correct video file depending on the clients bandwidth.
+The site then streams streams the correct video file depending on the clients bandwidth.
 
 
 ## Notes
 The site is a POC.
 Browswers:
-    - Works on chrome
-    - Does not work on Firefox (no Media Source Extensions support yet)
-    - Didn't manage to test on Safari or IE.
+* Works on chrome
+* Does not work on Firefox (no Media Source Extensions support yet)
+* Didn't manage to test on Safari or IE.
 
 
 
