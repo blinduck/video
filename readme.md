@@ -13,9 +13,9 @@ FFmpeg is used for conversion and also to create a manifest file.
 The site then streams the correct video file depending on the clients bandwidth.
 
 ##Setup
-git clone
-npm install
-node app.js
+git clone  
+npm install  
+node app.js  
 
 ## Notes
 **Browsers**
